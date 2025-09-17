@@ -1,45 +1,44 @@
-.custom-navbar {    
+.custom-navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    @include flex;
-    align-items: center;    
-    @include transition(all,.3s);
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
     font-family: 'Baloo Paaji', cursive;
+    background: transparent;
 
-    .logo { 
-        font-size: calc(20px + (30 - 20) * ((100vw - 300px) / (1300 - 300)));
+    .logo {
+        font-size: calc(24px + (34 - 24) * ((100vw - 300px) / 1300));
         text-decoration: none;
-        color: $white;;
+        color: $white;
     }
 
     .container {
-        flex-grow: 1;       
+        flex-grow: 1;
         min-height: 100px;
-        @include flex;
+        display: flex;
         align-items: center;
-        @include transition(all,.3s);
-    }   
+        transition: all 0.3s ease;
+    }
+
     .hamburger {
         margin-left: 20px;
         padding-top: 5px;
 
-         .hamburger-inner {
-            &,
-            &::before,
-            &::after {
-                background: $white;
-            }
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+            background: $white;
         }
-
     }
-        
+
     .nav {
         list-style-type: none;
         padding-left: 0;
-        @include flex;
+        display: flex;
         align-items: center;
         margin: 0;
         margin-left: auto;
@@ -50,7 +49,8 @@
             .link {
                 color: $white;
                 font-weight: 500;
-                text-decoration: none;              
+                text-decoration: none;
+                transition: color 0.3s ease;
 
                 &:hover,
                 &.active {
@@ -58,52 +58,51 @@
                 }
             }
         }
-
     }
 
     &.affix {
         background: $white;
-         
-        border-bottom: 1px solid rgba($border-color,.34);;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 
         .logo {
             color: $primary;
         }
+
         .container {
             min-height: 65px;
-        }       
+        }
 
         .nav .item .link {
             color: $gray-600;
+            &:hover,
+            &.active {
+                color: $primary;
+            }
         }
 
-
-        .hamburger-inner {
-            &,
-            &::before,
-            &::after {
-                    background: $gray-600;
-            }
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+            background: $gray-600;
         }
     }
 
     @include media-breakpoint-up(md) {
-
         .nav {
-             .item {
+            .item {
                 opacity: 0;
                 visibility: hidden;
                 transform: translateY(-50px);
-                transform: translateY(-50px);
-                &:nth-child(9) { @include transition(all,.1s); transition-delay: 0s }
-                &:nth-child(8) { @include transition(all,.2s); transition-delay: .05s }
-                &:nth-child(7) { @include transition(all,.3s); transition-delay: .1s }
-                &:nth-child(6) { @include transition(all,.4s); transition-delay: .15s }
-                &:nth-child(5) { @include transition(all,.5s); transition-delay: .2s }
-                &:nth-child(4) { @include transition(all,.6s); transition-delay: .25s }
-                &:nth-child(3) { @include transition(all,.7s); transition-delay: .3s }
-                &:nth-child(2) { @include transition(all,.8s); transition-delay: .35s }
-                &:nth-child(1) { @include transition(all,.9s); transition-delay: .4s }                
+                transition: all 0.3s ease;
+                &:nth-child(9) { transition-delay: 0s }
+                &:nth-child(8) { transition-delay: .05s }
+                &:nth-child(7) { transition-delay: .1s }
+                &:nth-child(6) { transition-delay: .15s }
+                &:nth-child(5) { transition-delay: .2s }
+                &:nth-child(4) { transition-delay: .25s }
+                &:nth-child(3) { transition-delay: .3s }
+                &:nth-child(2) { transition-delay: .35s }
+                &:nth-child(1) { transition-delay: .4s }
             }
 
             &.show {
@@ -111,20 +110,19 @@
                     transform: translateY(0);
                     opacity: 1;
                     visibility: visible;
-                }                   
+                }
             }
-
         }
-            
     }
 
     @include media-breakpoint-down(md) {
         .hamburger {
             margin-left: auto;
         }
+
         .nav {
             position: absolute;
-            top: calc(100% + 1px);
+            top: 100%;
             left: 0;
             background: $white;
             border-radius: 0 0 $card-border-radius $card-border-radius;
@@ -137,11 +135,11 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(6px);
-            @include transition(all,.3s);
+            transition: all, 0.3s;
 
             &.show {
                 opacity: 1;
-                visibility: visible;;
+                visibility: visible;
                 transform: translateY(0);
             }
 
@@ -150,7 +148,6 @@
                 display: block;
                 color: $gray-600;
             }
-
         }
     }
 }
