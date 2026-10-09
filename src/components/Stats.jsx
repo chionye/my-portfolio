@@ -1,46 +1,44 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { stats } from '../data.js'
+import { useInView, reducedMotion } from '../motion.js'
+import Icon from './Icon.jsx'
+import Reveal from './Reveal.jsx'
 
-function Stat({ count, label }) {
-  const ref = useRef(null)
+function Stat({ count, label, icon, index }) {
+  const [ref, inView] = useInView(0.4)
   const [val, setVal] = useState(0)
-  const done = useRef(false)
 
   useEffect(() => {
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !done.current) {
-        done.current = true
-        ref.current.classList.add('in')
-        const step = Math.max(1, Math.ceil(count / 40))
-        let cur = 0
-        const t = setInterval(() => {
-          cur += step
-          if (cur >= count) { cur = count; clearInterval(t) }
-          setVal(cur)
-        }, 30)
-        obs.disconnect()
-      }
-    }, { threshold: 0.3 })
-    obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [count])
+    if (!inView) return
+    if (reducedMotion()) { setVal(count); return }
+    let raf = 0
+    const start = performance.now()
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / 1600)
+      setVal(Math.round(count * (1 - Math.pow(1 - t, 4))))
+      if (t < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [inView, count])
 
   return (
-    <div className="stat" ref={ref}>
-      <div className="num">{val}+</div>
-      <div className="lbl">{label}</div>
-      <div className="bar" />
-    </div>
+    <Reveal from="up" delay={index * 0.08}>
+      <div className="card stat tilt spot" ref={ref}>
+        <span className="itile"><Icon name={icon} size={20} /></span>
+        <div className="stat-num">{val}<span className="plus">+</span></div>
+        <div className="stat-label">{label}</div>
+      </div>
+    </Reveal>
   )
 }
 
 export default function Stats() {
   return (
-    <div className="stats-wrap">
-      <div className="stats-prompt">$ whoami --stats</div>
-      <div className="stats-bar">
-        {stats.map((s) => <Stat key={s.label} {...s} />)}
+    <section className="stats-sec">
+      <div className="wrap stats">
+        {stats.map((s, i) => <Stat key={s.label} index={i} {...s} />)}
       </div>
-    </div>
+    </section>
   )
 }
